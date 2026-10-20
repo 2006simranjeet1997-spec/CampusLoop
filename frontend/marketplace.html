@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace | CampusLoop</title>
+    <link rel="stylesheet" href="css/marketplace.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">CampusLoop</a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="marketplace.html" class="active">Marketplace</a>
+            <a href="index.html#how-it-works">How It Works</a>
+            <a href="index.html#about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="#" class="login-btn">Login</a>
+            <a href="#" class="signup-btn">Sign Up</a>
+            <a href="list-item.html" class="list-btn">List an Item</a>
+        </div>
+    </header>
+
+    <main class="marketplace">
+
+        <section class="marketplace-heading">
+            <p class="eyebrow">YOUR CAMPUS, YOUR MARKETPLACE</p>
+            <h1>Find what you <span>need.</span></h1>
+            <p>Discover affordable items shared by students around you.</p>
+        </section>
+
+        <section class="search-section">
+            <div class="search-box">
+                <span>⌕</span>
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search books, laptops, clothes..."
+                    aria-label="Search items"
+                >
+                <button id="searchButton" type="button">Search</button>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="category-filters" id="categoryFilters">
+                <button class="filter-btn active" data-category="All">All Items</button>
+                <button class="filter-btn" data-category="Books">Books</button>
+                <button class="filter-btn" data-category="Electronics">Electronics</button>
+                <button class="filter-btn" data-category="Clothing">Clothing</button>
+                <button class="filter-btn" data-category="Accessories">Accessories</button>
+                <button class="filter-btn" data-category="Notes">Notes</button>
+            </div>
+
+            <div class="sort-section">
+                <label for="sortSelect">Sort by:</label>
+                <select id="sortSelect">
+                    <option value="default">Recommended</option>
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="products-heading">
+                <div>
+                    <h2>Explore Items</h2>
+                    <p>Find something useful for your campus life.</p>
+                </div>
+                <span id="itemCount">6 items</span>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+
+                <article class="product-card"
+                    data-id="book"
+                    data-category="Books"
+                    data-name="Engineering Mathematics Book"
+                    data-price="250"
+                    data-type="Buy · Sell">
+
+                    <div class="product-image book-image">
+                        <span class="product-badge">Popular</span>
+                        <span class="product-emoji">📚</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Books</p>
+                        <h3>Engineering Mathematics Book</h3>
+                        <p class="product-description">Good condition · Semester 1</p>
+                        <div class="product-bottom">
+                            <strong>₹250</strong>
+                            <span class="listing-type">Buy · Sell</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=book">View Details →</a>
+                    </div>
+                </article>
+
+                <article class="product-card"
+                    data-id="laptop"
+                    data-category="Electronics"
+                    data-name="Laptop"
+                    data-price="1200"
+                    data-type="Rent · Swap">
+
+                    <div class="product-image laptop-image">
+                        <span class="product-emoji">💻</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Electronics</p>
+                        <h3>Laptop</h3>
+                        <p class="product-description">Good condition · Available for rent</p>
+                        <div class="product-bottom">
+                            <strong>₹1,200</strong>
+                            <span class="listing-type">Rent · Swap</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=laptop">View Details →</a>
+                    </div>
+                </article>
+
+                <article class="product-card"
+                    data-id="hoodie"
+                    data-category="Clothing"
+                    data-name="Campus Hoodie"
+                    data-price="350"
+                    data-type="Buy · Swap">
+
+                    <div class="product-image clothing-image">
+                        <span class="product-emoji">👕</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Clothing</p>
+                        <h3>Campus Hoodie</h3>
+                        <p class="product-description">Good condition · Size M</p>
+                        <div class="product-bottom">
+                            <strong>₹350</strong>
+                            <span class="listing-type">Buy · Swap</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=hoodie">View Details →</a>
+                    </div>
+                </article>
+
+                <article class="product-card"
+                    data-id="calculator"
+                    data-category="Electronics"
+                    data-name="Scientific Calculator"
+                    data-price="400"
+                    data-type="Buy · Sell">
+
+                    <div class="product-image calculator-image">
+                        <span class="product-emoji">🧮</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Electronics</p>
+                        <h3>Scientific Calculator</h3>
+                        <p class="product-description">Works perfectly · Student essential</p>
+                        <div class="product-bottom">
+                            <strong>₹400</strong>
+                            <span class="listing-type">Buy · Sell</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=calculator">View Details →</a>
+                    </div>
+                </article>
+
+                <article class="product-card"
+                    data-id="notes"
+                    data-category="Notes"
+                    data-name="Computer Science Notes"
+                    data-price="100"
+                    data-type="Buy · Share">
+
+                    <div class="product-image notes-image">
+                        <span class="product-emoji">📝</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Notes</p>
+                        <h3>Computer Science Notes</h3>
+                        <p class="product-description">Neat notes · Exam preparation</p>
+                        <div class="product-bottom">
+                            <strong>₹100</strong>
+                            <span class="listing-type">Buy · Share</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=notes">View Details →</a>
+                    </div>
+                </article>
+
+                <article class="product-card"
+                    data-id="backpack"
+                    data-category="Accessories"
+                    data-name="College Backpack"
+                    data-price="300"
+                    data-type="Buy · Sell">
+
+                    <div class="product-image backpack-image">
+                        <span class="product-emoji">🎒</span>
+                    </div>
+
+                    <div class="product-info">
+                        <p class="product-category">Accessories</p>
+                        <h3>College Backpack</h3>
+                        <p class="product-description">Good condition · Spacious</p>
+                        <div class="product-bottom">
+                            <strong>₹300</strong>
+                            <span class="listing-type">Buy · Sell</span>
+                        </div>
+                        <a class="view-btn" href="item.html?id=backpack">View Details →</a>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="empty-state" id="emptyState" hidden>
+                <span>🔎</span>
+                <h3>No items found</h3>
+                <p>Try another search or select a different category.</p>
+                <button id="resetFilters" type="button">Clear Filters</button>
+            </div>
+        </section>
+
+        <section class="seller-banner">
+            <div>
+                <p class="eyebrow">HAVE SOMETHING TO SHARE?</p>
+                <h2>Give your unused items a new home.</h2>
+                <p>List your item and connect with students on your campus.</p>
+            </div>
+            <a href="list-item.html" class="banner-btn">List an Item →</a>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <a href="index.html" class="logo">CampusLoop</a>
+        <p>Buy less. Share more. Build a better campus.</p>
+        <p class="copyright">© 2026 CampusLoop. Made for students.</p>
+    </footer>
+
+    <script src="js/marketplace.js"></script>
+</body>
+</html>

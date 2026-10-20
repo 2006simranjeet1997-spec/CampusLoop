@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List an Item | CampusLoop</title>
+    <link rel="stylesheet" href="css/list-item.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">Campus<span>Loop</span></a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="marketplace.html">Marketplace</a>
+            <a href="index.html#how-it-works">How It Works</a>
+        </div>
+
+        <a href="marketplace.html" class="nav-button">Browse Items</a>
+    </nav>
+
+    <main class="page-container">
+        <div class="page-heading">
+            <span class="eyebrow">SHARE WITH YOUR CAMPUS</span>
+            <h1>List your <span>item.</span></h1>
+            <p>Give your pre-loved items a new home with another student.</p>
+        </div>
+
+        <form id="listingForm" class="listing-form">
+
+            <h2>Item Information</h2>
+            <p class="section-description">Tell students a little about what you're listing.</p>
+
+            <div class="form-group">
+                <label for="itemName">Item name *</label>
+                <input type="text" id="itemName" placeholder="e.g. Engineering Mathematics Book" required maxlength="80">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" required>
+                        <option value="">Select category</option>
+                        <option value="Books">Books</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Notes">Notes</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (₹) *</label>
+                    <input type="number" id="price" placeholder="e.g. 250" min="0" max="1000000" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="condition">Item condition *</label>
+                <select id="condition" required>
+                    <option value="">Select condition</option>
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Used">Used</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" rows="5" placeholder="Describe the item, its condition, and any important details..." required maxlength="1000"></textarea>
+                <span class="helper-text">Be honest about the item's condition.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="itemImage">Item image (optional)</label>
+                <input type="file" id="itemImage" accept="image/*">
+                <span class="helper-text">Choose an image from your device. Maximum size: 5 MB.</span>
+                <div id="imagePreview" class="image-preview">
+                    <span>📷</span>
+                    <p>Your image preview will appear here</p>
+                </div>
+            </div>
+
+            <div class="form-divider"></div>
+
+            <h2>Seller Information</h2>
+            <p class="section-description">Let interested students know who is listing the item.</p>
+
+            <div class="form-group">
+                <label for="sellerName">Your name *</label>
+                <input type="text" id="sellerName" placeholder="Enter your name" required maxlength="80">
+            </div>
+
+            <div class="form-group">
+                <label for="contact">Contact information *</label>
+                <input type="text" id="contact" placeholder="Email or phone number" required maxlength="120">
+                <span class="helper-text">Demo only: this information will not be sent to a server.</span>
+            </div>
+
+            <label class="checkbox-row">
+                <input type="checkbox" id="confirmDetails" required>
+                <span>I confirm that the information provided is accurate.</span>
+            </label>
+
+            <button type="submit" class="submit-button">Submit Listing →</button>
+
+            <p id="formMessage" class="form-message" role="status"></p>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <a href="index.html" class="logo">Campus<span>Loop</span></a>
+        <p>Give it a second life. Find it on campus.</p>
+        <p>© 2026 CampusLoop. Made for students.</p>
+    </footer>
+
+    <script src="js/list-item.js"></script>
+</body>
+</html>

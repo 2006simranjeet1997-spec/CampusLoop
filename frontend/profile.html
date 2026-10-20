@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | CampusLoop</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">Campus<span>Loop</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="marketplace.html">Marketplace</a>
+            <a href="list-item.html">List an Item</a>
+        </nav>
+
+        <a href="login.html" class="logout-button" id="logoutButton">Logout</a>
+    </header>
+
+    <main class="profile-page">
+
+        <section class="page-heading">
+            <p class="eyebrow">YOUR CAMPUS SPACE</p>
+            <h1>My <span>Profile</span></h1>
+            <p>Manage your student information and listed items.</p>
+        </section>
+
+        <section class="profile-card">
+            <div class="profile-avatar">👩‍🎓</div>
+
+            <div class="profile-info">
+                <p class="small-label">STUDENT PROFILE</p>
+                <h2 id="profileName">CampusLoop Student</h2>
+                <p id="profileEmail">student@example.com</p>
+                <span class="student-badge">Campus Member</span>
+            </div>
+
+            <button class="edit-button" id="editProfileButton">Edit Profile</button>
+        </section>
+
+        <section class="listings-section">
+            <div class="section-heading">
+                <div>
+                    <h2>My Listings</h2>
+                    <p>Items you have added to CampusLoop.</p>
+                </div>
+
+                <a href="list-item.html" class="add-button">+ List an Item</a>
+            </div>
+
+            <div class="listing-stats">
+                <div class="stat-card">
+                    <span>Total Listings</span>
+                    <h3 id="totalListings">3</h3>
+                </div>
+
+                <div class="stat-card">
+                    <span>Available Items</span>
+                    <h3 id="availableListings">3</h3>
+                </div>
+            </div>
+
+            <div class="listings-grid" id="listingsGrid"></div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📦</div>
+                <h3>No listings yet</h3>
+                <p>Start by listing something another student might need.</p>
+                <a href="list-item.html" class="add-button">List Your First Item</a>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <button class="close-button" id="closeModal" aria-label="Close">×</button>
+
+            <h2>Edit Profile</h2>
+            <p>Update your demo profile information.</p>
+
+            <form id="profileForm">
+                <label for="editName">Full name</label>
+                <input type="text" id="editName" required maxlength="80">
+
+                <label for="editEmail">Email</label>
+                <input type="email" id="editEmail" required maxlength="120">
+
+                <button type="submit" class="save-button">Save Changes</button>
+                <p id="profileMessage" role="status"></p>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <a href="index.html" class="logo">Campus<span>Loop</span></a>
+        <p>Give it a second life. Find it on campus.</p>
+        <p>© 2026 CampusLoop. Made for students.</p>
+    </footer>
+
+    <script src="js/profile.js"></script>
+</body>
+</html>
