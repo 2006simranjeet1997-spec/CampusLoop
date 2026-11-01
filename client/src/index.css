@@ -1,0 +1,24 @@
+
+:root {
+  font-family: Arial, sans-serif;
+  color: #30283b;
+  background: #ffffff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+a {
+  text-decoration: none;
+}
