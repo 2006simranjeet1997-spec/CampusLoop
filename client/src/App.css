@@ -1808,3 +1808,260 @@
     padding: 25px 20px;
   }
 }
+
+/* ABOUT AND HOW IT WORKS PAGES */
+
+.about-page,
+.how-page {
+  color: #25243a;
+  background: #ffffff;
+}
+
+.about-hero,
+.how-hero {
+  text-align: center;
+  padding: 90px 20px 85px;
+  background: #f6f3ff;
+}
+
+.section-tag {
+  display: inline-block;
+  color: #8055b5;
+  background: #eee8ff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+
+.about-hero h1,
+.how-hero h1 {
+  font-size: clamp(36px, 5vw, 54px);
+  line-height: 1.15;
+  margin: 0 auto 20px;
+  max-width: 850px;
+  color: #25243a;
+}
+
+.about-hero h1 span,
+.how-hero h1 span {
+  color: #8655c7;
+}
+
+.about-hero p,
+.how-hero p {
+  max-width: 650px;
+  margin: 0 auto 28px;
+  color: #70738a;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.about-button {
+  display: inline-block;
+  background: #171c2b;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 14px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.about-button:hover {
+  background: #8055b5;
+  transform: translateY(-2px);
+}
+
+.about-story,
+.about-values,
+.how-steps,
+.how-options {
+  max-width: 1200px;
+  margin: auto;
+  padding: 75px 6%;
+}
+
+.about-story {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-story-content h2,
+.section-heading h2 {
+  font-size: 34px;
+  margin: 0 0 18px;
+}
+
+.about-story-content p {
+  color: #70738a;
+  line-height: 1.9;
+  font-size: 16px;
+}
+
+.about-highlight {
+  background: #f5f0ff;
+  border: 1px solid #e8defb;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.highlight-icon {
+  font-size: 45px;
+  margin-bottom: 15px;
+}
+
+.about-highlight h3 {
+  font-size: 23px;
+}
+
+.about-highlight p {
+  color: #70738a;
+  line-height: 1.7;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-heading p {
+  color: #70738a;
+  line-height: 1.7;
+}
+
+.value-grid,
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.value-card,
+.step-card {
+  position: relative;
+  padding: 32px;
+  border: 1px solid #e9e5f1;
+  border-radius: 16px;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+.value-card:hover,
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(40, 30, 70, 0.08);
+}
+
+.value-icon,
+.step-icon {
+  font-size: 36px;
+  margin-bottom: 18px;
+}
+
+.value-card h3,
+.step-card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.value-card p,
+.step-card p {
+  color: #70738a;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.step-number {
+  color: #a78bd4;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.option-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  border: 1px solid #e9e5f1;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.option-card > span {
+  font-size: 35px;
+}
+
+.option-card h3 {
+  margin: 0 0 8px;
+}
+
+.option-card p {
+  margin: 0;
+  color: #70738a;
+  line-height: 1.6;
+}
+
+.about-cta,
+.how-cta {
+  text-align: center;
+  background: #f5f0ff;
+  padding: 70px 20px;
+}
+
+.about-cta h2,
+.how-cta h2 {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.about-cta p,
+.how-cta p {
+  color: #70738a;
+  margin-bottom: 25px;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .about-hero,
+  .how-hero {
+    padding: 65px 20px;
+  }
+
+  .about-story {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .value-grid,
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-story,
+  .about-values,
+  .how-steps,
+  .how-options {
+    padding: 55px 20px;
+  }
+
+  .section-heading h2,
+  .about-story-content h2 {
+    font-size: 28px;
+  }
+}
