@@ -1,57 +1,149 @@
-# 🔄 CampusLoop
+# CampusLoop 🎓
 
-**A Campus-Based Marketplace for Students**
+**A Student Marketplace for Campus Communities**
 
-CampusLoop is a student-focused marketplace designed to make buying, selling, borrowing, renting, and swapping items within a college community easier and more accessible.
+CampusLoop is a full-stack student marketplace designed to help students buy, sell, rent, borrow, and swap items within their campus community.
 
-The platform aims to connect students and encourage affordable, sustainable resource sharing on campus.
+The goal is to create a convenient and student-friendly platform where useful items can find a second life and students can connect with one another.
 
-## ✨ Features
+## ✨ Key Features
 
-- 🏠 **Homepage** – Introduction to the platform.
-- 🛍️ **Marketplace** – Browse available items and listings.
-- 🗂️ **Item Categories** – Explore items by category.
-- 📄 **Item Details** – View individual item information.
-- 🔗 **Dynamic Routing** – Display item details using URL parameters.
-- 💬 **Contact Seller** – Interface for connecting buyers and sellers.
+### Implemented
+- User registration and login APIs
+- Secure password hashing using bcrypt
+- JWT-based authentication
+- Protected user profile API
+- MongoDB database integration
+- React frontend with multiple pages
+- Marketplace UI with search and category filters
+- Item listing form and item details UI
+
+### Planned
+- Create, edit, and delete marketplace listings
+- Dynamic marketplace connected to MongoDB
+- Image uploads
+- AI-powered chatbot
+- AI-based marketplace search and recommendations
+- Complete frontend and backend integration
 
 ## 🛠️ Tech Stack
 
-**Currently Implemented**
-- HTML5
-- CSS3
+**Frontend**
+- React.js
+- Vite
+- HTML
+- CSS
 - JavaScript
 
-**Planned Backend & Frontend Technologies**
-- React.js
+**Backend**
 - Node.js
 - Express.js
 - MongoDB
+- Mongoose
+- JWT
+- bcryptjs
 
-**Development Tools**
-- Visual Studio Code
-- Git
-- GitHub
+**Tools**
+- Git and GitHub
+- VS Code
+- MongoDB Atlas
 
-## 🚧 Project Status
+## 📁 Project Structure
 
-CampusLoop is currently under development.
+```text
+CampusLoop/
+├── frontend/             # Original frontend
+├── client/               # React frontend
+│   └── src/
+├── backend/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   │   └── authController.js
+│   ├── middleware/
+│   │   └── authMiddleware.js
+│   ├── models/
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   └── userRoutes.js
+│   ├── .env
+│   ├── .gitignore
+│   ├── package.json
+│   └── server.js
+└── README.md
+```
 
-The frontend is being developed first. Backend development, database integration, and additional marketplace functionality are planned for upcoming stages.
+## ⚙️ Getting Started
 
-## 🎯 Future Improvements
+### 1. Clone the repository
 
-- User registration and authentication
-- Student profiles
-- Create, edit, and delete listings
-- Search and filter functionality
-- Backend API integration
-- MongoDB database integration
-- Seller-buyer communication
+```bash
+git clone https://github.com/2006simranjeet1997-spec/CampusLoop.git
+cd CampusLoop
+```
 
-## 👩‍💻 Author
+### 2. Set up the backend
 
-**Simranjeet Kaur**
+```bash
+cd backend
+npm install
+```
 
-Computer Science Engineering Student | Aspiring Full Stack Developer
+Create a `.env` file inside the backend folder:
 
+```env
+PORT=5001
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_random_secret
+```
+
+### 3. Start the backend
+
+```bash
+npm run dev
+```
+
+Backend runs at:
+
+`http://localhost:5001`
+
+### 4. Set up the frontend
+
+Open another terminal:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Open the local URL displayed by Vite.
+
+## 🔐 Authentication API
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login user |
+| GET | `/api/users/profile` | Get authenticated user profile |
+
+Protected endpoints require a JWT token in the Authorization header:
+
+```text
+Authorization: Bearer YOUR_TOKEN
+```
+
+## 🎯 Project Goal
+
+CampusLoop aims to make campus life more affordable, sustainable, and connected through a student-focused marketplace enhanced with AI capabilities.
+
+## 🚀 Development Status
+
+Currently under active development.
+
+The project is being developed in a 10-day intensive development sprint, with a focus on MERN stack implementation, authentication, marketplace functionality, and AI integration.
+
+---
+
+**Built with ❤️ for students, by students.**
