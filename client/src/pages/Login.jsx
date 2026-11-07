@@ -50,6 +50,8 @@ function Login() {
       // Save logged-in user information
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      window.dispatchEvent(new Event("authChanged"));
+
       alert("Welcome back to CampusLoop!");
 
       navigate("/");

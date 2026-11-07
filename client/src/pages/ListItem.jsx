@@ -45,8 +45,14 @@ function ListItem() {
 
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image.");
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      setError("Only JPG, PNG and WEBP images are allowed.");
       e.target.value = "";
       return;
     }
@@ -77,7 +83,6 @@ function ListItem() {
       return;
     }
 
-    // Get the JWT token saved after login
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -88,18 +93,29 @@ function ListItem() {
     try {
       setLoading(true);
 
+      // Create FormData for text fields and image
+      const submissionData = new FormData();
+
+      submissionData.append("itemName", formData.itemName);
+      submissionData.append("category", formData.category);
+      submissionData.append("listingType", formData.listingType);
+      submissionData.append("price", Number(formData.price));
+      submissionData.append("condition", formData.condition);
+      submissionData.append("description", formData.description);
+
+      // Attach image if selected
+      if (image) {
+        submissionData.append("image", image);
+      }
+
       const response = await fetch(
         "http://localhost:5001/api/listings",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            ...formData,
-            price: Number(formData.price),
-          }),
+          body: submissionData,
         }
       );
 
@@ -232,7 +248,11 @@ function ListItem() {
 
                 <button
                   type="button"
-                  onClick={() => setImage(null)}
+                  onClick={() => {
+                    setImage(null);
+                    const fileInput = document.getElementById("itemImage");
+                    if (fileInput) fileInput.value = "";
+                  }}
                   className="remove-image"
                 >
                   Remove Image

@@ -1,0 +1,359 @@
+
+.profile-page {
+    min-height: 75vh;
+    padding: 45px 7.5%;
+    background: #f7f5ff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .profile-heading {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+  }
+  
+  .profile-avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: #eee7ff;
+    color: #7651a8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  .profile-heading h1 {
+    color: #24213b;
+    margin-bottom: 6px;
+  }
+  
+  .profile-heading p {
+    color: #777;
+    margin-bottom: 5px;
+  }
+  
+  .profile-heading span {
+    color: #7651a8;
+    font-size: 13px;
+  }
+  
+  .profile-dashboard {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 25px;
+    align-items: start;
+  }
+  
+  .profile-sidebar,
+  .profile-content {
+    background: white;
+    border: 1px solid #eeeaf7;
+    border-radius: 16px;
+    padding: 22px;
+  }
+  
+  .profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .profile-sidebar button {
+    padding: 15px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #39354d;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  .profile-sidebar button:hover,
+  .profile-sidebar button.active {
+    background: #f0ebff;
+    color: #7651a8;
+  }
+  
+  .profile-content h2 {
+    font-size: 25px;
+    color: #24213b;
+    margin-bottom: 8px;
+  }
+  
+  .profile-description {
+    color: #777;
+    margin-bottom: 25px;
+  }
+  
+  .profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .profile-stat-card {
+    padding: 22px;
+    background: #f8f5ff;
+    border: 1px solid #eeeaf7;
+    border-radius: 12px;
+  }
+  
+  .profile-stat-card span {
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .profile-stat-card h3 {
+    color: #7651a8;
+    font-size: 28px;
+    margin-top: 10px;
+  }
+  
+  .profile-section-card {
+    padding: 22px;
+    border: 1px solid #eeeaf7;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-section-card h3 {
+    color: #29253e;
+    margin-bottom: 15px;
+  }
+  
+  .profile-section-card p {
+    color: #777;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  
+  .profile-info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 16px 0;
+    border-top: 1px solid #eeeaf7;
+  }
+  
+  .profile-info-row span {
+    color: #777;
+  }
+  
+  .profile-info-row strong {
+    color: #29253e;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+  
+  .profile-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .profile-quick-actions a,
+  .profile-action-link,
+  .profile-listing-heading a {
+    color: #7651a8;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .profile-muted {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  
+  .profile-listing-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  
+  .profile-listing-heading h3 {
+    color: #29253e;
+  }
+  
+  .profile-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  
+  .profile-listing-card {
+    border: 1px solid #eeeaf7;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+  }
+  
+  .profile-listing-image {
+    height: 160px;
+    background: #f1edfa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    overflow: hidden;
+  }
+  
+  .profile-listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-listing-details {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+  }
+  
+  .profile-listing-details h3 {
+    color: #29253e;
+  }
+  
+  .profile-listing-details p {
+    color: #777;
+    font-size: 13px;
+  }
+  
+  .profile-listing-details strong {
+    color: #7651a8;
+  }
+  
+  .profile-listing-details a {
+    color: #7651a8;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .profile-status {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  
+  .profile-status.available {
+    background: #e5f8ed;
+    color: #23834b;
+  }
+  
+  .profile-status.other {
+    background: #f1edfa;
+    color: #7651a8;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-page {
+      padding: 30px 5%;
+    }
+  
+    .profile-dashboard {
+      grid-template-columns: 1fr;
+    }
+  
+    .profile-sidebar {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+  
+    .profile-stats {
+      grid-template-columns: 1fr;
+    }
+  
+    .profile-listings-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+
+.profile-listing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .profile-listing-actions button,
+  .edit-form-actions button {
+    padding: 9px 12px;
+    border: 1px solid #e5ddf5;
+    border-radius: 7px;
+    background: #f5f0ff;
+    color: #7651a8;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .profile-listing-actions button:hover,
+  .edit-form-actions button:hover {
+    background: #e9dfff;
+  }
+  
+  .profile-listing-actions .delete-listing-btn {
+    background: #fff0f0;
+    color: #d93636;
+    border-color: #ffdada;
+  }
+  
+  .edit-listing-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .edit-listing-form label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #39354d;
+  }
+  
+  .edit-listing-form input,
+  .edit-listing-form select,
+  .edit-listing-form textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd5eb;
+    border-radius: 8px;
+    font: inherit;
+  }
+  
+  .edit-listing-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .edit-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .edit-listing-form .image-preview {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .edit-listing-form .image-preview img {
+    width: 150px !important;
+    height: 150px !important;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #e5ddf5;
+    background: #f5f0ff;
+  }
