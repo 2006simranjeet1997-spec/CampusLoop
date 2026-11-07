@@ -10,6 +10,9 @@ function Login() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,18 +20,52 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    alert("Login UI working! Backend integration coming soon.");
+    try {
+      setLoading(true);
 
-    console.log("Login details:", formData);
-    navigate("/");
+      const response = await fetch(
+        "http://localhost:5001/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Login failed.");
+      }
+
+      // Save JWT token
+      localStorage.setItem("token", data.token);
+
+      // Save logged-in user information
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      alert("Welcome back to CampusLoop!");
+
+      navigate("/");
+
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <main className="auth-page">
       <div className="auth-card">
+
         <div className="auth-heading">
           <span className="section-label">WELCOME BACK</span>
           <h1>Login to CampusLoop</h1>
@@ -37,6 +74,7 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email Address</label>
+
           <input
             id="email"
             name="email"
@@ -48,6 +86,7 @@ function Login() {
           />
 
           <label htmlFor="password">Password</label>
+
           <input
             id="password"
             name="password"
@@ -58,14 +97,25 @@ function Login() {
             required
           />
 
-          <button type="submit" className="auth-button">
-            Login
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <p className="auth-switch">
           Don't have an account? <Link to="/signup">Sign Up</Link>
         </p>
+
       </div>
     </main>
   );

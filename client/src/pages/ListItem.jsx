@@ -1,7 +1,10 @@
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ListItem() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     itemName: "",
     category: "",
@@ -13,6 +16,8 @@ function ListItem() {
 
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!image) {
@@ -41,43 +46,86 @@ function ListItem() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      alert("Please select a valid image.");
+      setError("Please select a valid image.");
       e.target.value = "";
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be smaller than 5 MB.");
+      setError("Image must be smaller than 5 MB.");
       e.target.value = "";
       return;
     }
 
+    setError("");
     setImage(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (!formData.itemName.trim() ||
-        !formData.category ||
-        !formData.listingType ||
-        !formData.price ||
-        !formData.condition ||
-        !formData.description.trim()) {
-      alert("Please fill in all required fields.");
+    if (
+      !formData.itemName.trim() ||
+      !formData.category ||
+      !formData.listingType ||
+      formData.price === "" ||
+      !formData.condition ||
+      !formData.description.trim()
+    ) {
+      setError("Please fill in all required fields.");
       return;
     }
 
-    alert("Your item listing form is ready! Backend integration coming soon.");
+    // Get the JWT token saved after login
+    const token = localStorage.getItem("token");
 
-    console.log("Listing details:", formData);
-    console.log("Selected image:", image);
+    if (!token) {
+      setError("Please login before publishing a listing.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5001/api/listings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...formData,
+            price: Number(formData.price),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to publish listing.");
+      }
+
+      alert("Your listing has been published successfully!");
+
+      navigate("/marketplace");
+
+    } catch (err) {
+      console.error("Publish listing error:", err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="list-item-page">
       <div className="listing-container">
         <h1>List an Item</h1>
+
         <p className="listing-subtitle">
           Share something with students on your campus.
         </p>
@@ -110,10 +158,9 @@ function ListItem() {
               <option value="">Select category</option>
               <option value="Electronics">Electronics</option>
               <option value="Books">Books</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Sports">Sports</option>
-              <option value="Other">Other</option>
+              <option value="Study Materials">Study Materials</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Others">Others</option>
             </select>
           </div>
 
@@ -140,7 +187,7 @@ function ListItem() {
               type="number"
               id="price"
               name="price"
-              placeholder="Enter price"
+              placeholder="Enter price (0 if free or swap)"
               min="0"
               value={formData.price}
               onChange={handleChange}
@@ -173,11 +220,16 @@ function ListItem() {
               accept="image/png, image/jpeg, image/webp"
               onChange={handleImageChange}
             />
+
             <small>JPG, PNG or WEBP. Maximum size: 5 MB.</small>
 
             {imagePreview && (
               <div className="image-preview">
-                <img src={imagePreview} alt="Selected item preview" />
+                <img
+                  src={imagePreview}
+                  alt="Selected item preview"
+                />
+
                 <button
                   type="button"
                   onClick={() => setImage(null)}
@@ -202,8 +254,18 @@ function ListItem() {
             />
           </div>
 
-          <button type="submit" className="publish-button">
-            Publish Listing
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="publish-button"
+            disabled={loading}
+          >
+            {loading ? "Publishing..." : "Publish Listing"}
           </button>
         </form>
       </div>

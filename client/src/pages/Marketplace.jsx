@@ -1,68 +1,15 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const items = [
-  {
-    id: 1,
-    name: "Study Laptop",
-    category: "Electronics",
-    type: "Rent",
-    price: 500,
-    unit: "/ week",
-    emoji: "💻",
-  },
-  {
-    id: 2,
-    name: "Engineering Books",
-    category: "Books",
-    type: "Sell",
-    price: 350,
-    unit: "",
-    emoji: "📚",
-  },
-  {
-    id: 3,
-    name: "Wireless Headphones",
-    category: "Electronics",
-    type: "Sell",
-    price: 800,
-    unit: "",
-    emoji: "🎧",
-  },
-  {
-    id: 4,
-    name: "Scientific Calculator",
-    category: "Study Materials",
-    type: "Borrow",
-    price: 100,
-    unit: "/ day",
-    emoji: "🧮",
-  },
-  {
-    id: 5,
-    name: "College Backpack",
-    category: "Accessories",
-    type: "Swap",
-    price: 0,
-    unit: "",
-    emoji: "🎒",
-  },
-  {
-    id: 6,
-    name: "Desk Lamp",
-    category: "Accessories",
-    type: "Sell",
-    price: 250,
-    unit: "",
-    emoji: "💡",
-  },
-];
-
 function Marketplace() {
+  const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [type, setType] = useState("All");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const categories = [
     "All",
@@ -70,28 +17,76 @@ function Marketplace() {
     "Books",
     "Study Materials",
     "Accessories",
+    "Others",
   ];
 
   const types = ["All", "Sell", "Rent", "Borrow", "Swap"];
 
-  const filteredItems = items.filter((item) => {
-    const matchesSearch = item.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  // Fetch listings from backend
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-    const matchesCategory =
-      category === "All" || item.category === category;
+        const params = new URLSearchParams();
 
-    const matchesType = type === "All" || item.type === type;
+        if (search.trim()) {
+          params.append("search", search.trim());
+        }
 
-    return matchesSearch && matchesCategory && matchesType;
-  });
+        if (category !== "All") {
+          params.append("category", category);
+        }
+
+        if (type !== "All") {
+          params.append("listingType", type);
+        }
+
+        const response = await fetch(
+          `http://localhost:5001/api/listings?${params.toString()}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Failed to fetch listings.");
+        }
+
+        setItems(data.listings);
+
+      } catch (err) {
+        console.error("Marketplace error:", err);
+        setError(err.message || "Unable to load marketplace items.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, [search, category, type]);
+
+  // Emoji based on category
+  const getEmoji = (category) => {
+    const emojis = {
+      Electronics: "💻",
+      Books: "📚",
+      "Study Materials": "🧮",
+      Accessories: "🎒",
+      Others: "📦",
+    };
+
+    return emojis[category] || "📦";
+  };
 
   return (
     <main className="marketplace-page">
+
       <section className="marketplace-header">
         <span className="section-label">STUDENT MARKETPLACE</span>
+
         <h1>Explore the Marketplace</h1>
+
         <p>Find what you need. Share what you don't.</p>
 
         <input
@@ -104,13 +99,19 @@ function Marketplace() {
       </section>
 
       <section className="marketplace-content">
+
         <div className="filter-group">
           <h3>Categories</h3>
+
           <div className="filter-options">
             {categories.map((item) => (
               <button
                 key={item}
-                className={category === item ? "filter-btn active" : "filter-btn"}
+                className={
+                  category === item
+                    ? "filter-btn active"
+                    : "filter-btn"
+                }
                 onClick={() => setCategory(item)}
               >
                 {item}
@@ -121,11 +122,16 @@ function Marketplace() {
 
         <div className="filter-group">
           <h3>Listing Type</h3>
+
           <div className="filter-options">
             {types.map((item) => (
               <button
                 key={item}
-                className={type === item ? "filter-btn active" : "filter-btn"}
+                className={
+                  type === item
+                    ? "filter-btn active"
+                    : "filter-btn"
+                }
                 onClick={() => setType(item)}
               >
                 {item}
@@ -135,47 +141,92 @@ function Marketplace() {
         </div>
 
         <div className="marketplace-results">
+
           <div className="results-heading">
             <h2>Available Items</h2>
-            <span>{filteredItems.length} items found</span>
+            <span>{items.length} items found</span>
           </div>
 
-          <div className="marketplace-grid">
-            {filteredItems.map((item) => (
-              <article className="market-item-card" key={item.id}>
-                <div className="market-item-image">
-                  <span>{item.emoji}</span>
-                  <span className="listing-type">{item.type}</span>
-                </div>
-
-                <div className="market-item-info">
-                  <span className="item-category">{item.category}</span>
-                  <h3>{item.name}</h3>
-                  <p>
-                    {item.price === 0
-                      ? "Exchange for another item"
-                      : `₹${item.price} ${item.unit}`}
-                  </p>
-
-                  <Link
-                    to={`/item/${item.id}`}
-                    className="view-item-btn"
-                  >
-                    View Details →
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {filteredItems.length === 0 && (
+          {loading ? (
             <div className="empty-results">
-              <h3>No items found</h3>
-              <p>Try changing your search or filters.</p>
+              <h3>Loading marketplace...</h3>
+              <p>Please wait while we fetch available items.</p>
             </div>
+          ) : error ? (
+            <div className="empty-results">
+              <h3>Something went wrong</h3>
+              <p>{error}</p>
+            </div>
+          ) : (
+            <>
+              <div className="marketplace-grid">
+
+                {items.map((item) => (
+                  <article
+                    className="market-item-card"
+                    key={item._id}
+                  >
+
+                    <div className="market-item-image">
+
+                      {item.imageUrl ? (
+                        <img
+                          src={item.imageUrl}
+                          alt={item.itemName}
+                        />
+                      ) : (
+                        <span>{getEmoji(item.category)}</span>
+                      )}
+
+                      <span className="listing-type">
+                        {item.listingType}
+                      </span>
+
+                    </div>
+
+                    <div className="market-item-info">
+
+                      <span className="item-category">
+                        {item.category}
+                      </span>
+
+                      <h3>{item.itemName}</h3>
+
+                      <p>
+                        {item.listingType === "Swap"
+                          ? "Exchange for another item"
+                          : item.price === 0
+                          ? "Price on request"
+                          : `₹${item.price}`}
+                      </p>
+
+                      <Link
+                        to={`/item/${item._id}`}
+                        className="view-item-btn"
+                      >
+                        View Details →
+                      </Link>
+
+                    </div>
+
+                  </article>
+                ))}
+
+              </div>
+
+              {items.length === 0 && (
+                <div className="empty-results">
+                  <h3>No items found</h3>
+                  <p>Try changing your search or filters.</p>
+                </div>
+              )}
+            </>
           )}
+
         </div>
+
       </section>
+
     </main>
   );
 }
