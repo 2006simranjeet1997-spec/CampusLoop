@@ -101,6 +101,52 @@ const getMyPurchaseRequests = async (req, res) => {
 };
 
 
+// BUYER: CANCEL PURCHASE REQUEST
+const cancelPurchaseRequest = async (req, res) => {
+  try {
+    const request = await PurchaseRequest.findById(req.params.id);
+
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Purchase request not found."
+      });
+    }
+
+    if (request.buyer.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to cancel this request."
+      });
+    }
+
+    if (request.status !== "Pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Only pending requests can be cancelled."
+      });
+    }
+
+    request.status = "Cancelled";
+    await request.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Purchase request cancelled successfully.",
+      request
+    });
+
+  } catch (error) {
+    console.error("Cancel purchase request error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to cancel purchase request."
+    });
+  }
+};
+
+
 // SELLER: GET REQUESTS RECEIVED
 const getSellerPurchaseRequests = async (req, res) => {
   try {
@@ -172,15 +218,11 @@ const updatePurchaseRequest = async (req, res) => {
       });
     }
 
-    request.status = status;
-    await request.save();
-
-    // If accepted, mark item as sold
     if (status === "Accepted") {
-      listing.status = "Sold";
+      listing.status = "Reserved";
       await listing.save();
 
-      // Reject other pending requests for this item
+      // Reject other pending requests for this listing
       await PurchaseRequest.updateMany(
         {
           listing: listing._id,
@@ -192,6 +234,9 @@ const updatePurchaseRequest = async (req, res) => {
         }
       );
     }
+
+    request.status = status;
+    await request.save();
 
     res.status(200).json({
       success: true,
@@ -214,5 +259,6 @@ module.exports = {
   createPurchaseRequest,
   getMyPurchaseRequests,
   getSellerPurchaseRequests,
-  updatePurchaseRequest
+  updatePurchaseRequest,
+  cancelPurchaseRequest
 };

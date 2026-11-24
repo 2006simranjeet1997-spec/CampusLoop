@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+const API = "http://localhost:5001/api";
+
 function Marketplace() {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
@@ -10,6 +12,10 @@ function Marketplace() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // WISHLIST STATES
+  const [wishlistIds, setWishlistIds] = useState([]);
+  const [wishlistLoading, setWishlistLoading] = useState({});
 
   const categories = [
     "All",
@@ -22,7 +28,7 @@ function Marketplace() {
 
   const types = ["All", "Sell", "Rent", "Borrow", "Swap"];
 
-  // Fetch listings from backend
+  // FETCH LISTINGS
   useEffect(() => {
     const fetchListings = async () => {
       try {
@@ -44,7 +50,7 @@ function Marketplace() {
         }
 
         const response = await fetch(
-          `http://localhost:5001/api/listings?${params.toString()}`
+          `${API}/listings?${params.toString()}`
         );
 
         const data = await response.json();
@@ -53,8 +59,7 @@ function Marketplace() {
           throw new Error(data.message || "Failed to fetch listings.");
         }
 
-        setItems(data.listings);
-
+        setItems(data.listings || []);
       } catch (err) {
         console.error("Marketplace error:", err);
         setError(err.message || "Unable to load marketplace items.");
@@ -66,7 +71,98 @@ function Marketplace() {
     fetchListings();
   }, [search, category, type]);
 
-  // Emoji based on category
+  // FETCH LOGGED-IN USER'S WISHLIST
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setWishlistIds([]);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API}/users/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Failed to fetch wishlist.");
+        }
+
+        const savedIds = (data.wishlist || []).map(
+          (listing) => listing._id
+        );
+
+        setWishlistIds(savedIds);
+      } catch (err) {
+        console.error("Wishlist fetch error:", err);
+      }
+    };
+
+    fetchWishlist();
+  }, []);
+
+  // ADD OR REMOVE ITEM FROM WISHLIST
+  const handleWishlistToggle = async (listingId) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login to add items to your wishlist.");
+      return;
+    }
+
+    if (wishlistLoading[listingId]) {
+      return;
+    }
+
+    const isSaved = wishlistIds.includes(listingId);
+
+    try {
+      setWishlistLoading((prev) => ({
+        ...prev,
+        [listingId]: true,
+      }));
+
+      const response = await fetch(
+        `${API}/users/wishlist/${listingId}`,
+        {
+          method: isSaved ? "DELETE" : "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Wishlist action failed.");
+      }
+
+      if (isSaved) {
+        setWishlistIds((prev) =>
+          prev.filter((id) => id !== listingId)
+        );
+      } else {
+        setWishlistIds((prev) => [...prev, listingId]);
+      }
+    } catch (err) {
+      console.error("Wishlist error:", err);
+      alert(err.message || "Unable to update wishlist.");
+    } finally {
+      setWishlistLoading((prev) => ({
+        ...prev,
+        [listingId]: false,
+      }));
+    }
+  };
+
+  // EMOJI BASED ON CATEGORY
   const getEmoji = (category) => {
     const emojis = {
       Electronics: "💻",
@@ -81,7 +177,6 @@ function Marketplace() {
 
   return (
     <main className="marketplace-page">
-
       <section className="marketplace-header">
         <span className="section-label">STUDENT MARKETPLACE</span>
 
@@ -99,7 +194,6 @@ function Marketplace() {
       </section>
 
       <section className="marketplace-content">
-
         <div className="filter-group">
           <h3>Categories</h3>
 
@@ -108,9 +202,7 @@ function Marketplace() {
               <button
                 key={item}
                 className={
-                  category === item
-                    ? "filter-btn active"
-                    : "filter-btn"
+                  category === item ? "filter-btn active" : "filter-btn"
                 }
                 onClick={() => setCategory(item)}
               >
@@ -128,9 +220,7 @@ function Marketplace() {
               <button
                 key={item}
                 className={
-                  type === item
-                    ? "filter-btn active"
-                    : "filter-btn"
+                  type === item ? "filter-btn active" : "filter-btn"
                 }
                 onClick={() => setType(item)}
               >
@@ -141,7 +231,6 @@ function Marketplace() {
         </div>
 
         <div className="marketplace-results">
-
           <div className="results-heading">
             <h2>Available Items</h2>
             <span>{items.length} items found</span>
@@ -160,65 +249,83 @@ function Marketplace() {
           ) : (
             <>
               <div className="marketplace-grid">
+                {items.map((item) => {
+                  const isSaved = wishlistIds.includes(item._id);
+                  const isProcessing = wishlistLoading[item._id];
 
-                {items.map((item) => (
-                  <article
-                    className="market-item-card"
-                    key={item._id}
-                  >
+                  return (
+                    <article
+                      className="market-item-card"
+                      key={item._id}
+                    >
+                      <div className="market-item-image">
+                        {item.imageUrl ? (
+                          <img
+                            src={
+                              item.imageUrl.startsWith("http")
+                                ? item.imageUrl
+                                : `http://localhost:5001${item.imageUrl}`
+                            }
+                            alt={item.itemName}
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <span>{getEmoji(item.category)}</span>
+                        )}
 
-                    <div className="market-item-image">
-
-                      {item.imageUrl ? (
-                        <img
-                          src={
-                            item.imageUrl.startsWith("http")
-                              ? item.imageUrl
-                              : `http://localhost:5001${item.imageUrl}`
+                        <button
+                          type="button"
+                          className={`wishlist-heart ${
+                            isSaved ? "saved" : ""
+                          }`}
+                          onClick={() => handleWishlistToggle(item._id)}
+                          disabled={isProcessing}
+                          aria-label={
+                            isSaved
+                              ? "Remove from wishlist"
+                              : "Add to wishlist"
                           }
-                          alt={item.itemName}
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                          }}
-                        />
-                      ) : (
-                        <span>{getEmoji(item.category)}</span>
-                      )}
+                          title={
+                            isSaved
+                              ? "Remove from wishlist"
+                              : "Add to wishlist"
+                          }
+                        >
+                          {isProcessing ? "..." : isSaved ? "♥" : "♡"}
+                        </button>
 
-                      <span className="listing-type">
-                        {item.listingType}
-                      </span>
+                        <span className="listing-type">
+                          {item.listingType}
+                        </span>
+                      </div>
 
-                    </div>
+                      <div className="market-item-info">
+                        <span className="item-category">
+                          {item.category}
+                        </span>
 
-                    <div className="market-item-info">
+                        <h3>{item.itemName}</h3>
 
-                      <span className="item-category">
-                        {item.category}
-                      </span>
+                        <p>
+                          {item.listingType === "Swap"
+                            ? "Exchange for another item"
+                            : item.price === 0
+                            ? "Price on request"
+                            : `₹${item.price}`}
+                        </p>
 
-                      <h3>{item.itemName}</h3>
-
-                      <p>
-                        {item.listingType === "Swap"
-                          ? "Exchange for another item"
-                          : item.price === 0
-                          ? "Price on request"
-                          : `₹${item.price}`}
-                      </p>
-
-                      <Link
-                        to={`/item/${item._id}`}
-                        className="view-item-btn"
-                      >
-                        View Details →
-                      </Link>
-
-                    </div>
-
-                  </article>
-                ))}
-
+                        <Link
+                          to={`/item/${item._id}`}
+                          className="view-item-btn"
+                        >
+                          View Details →
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
 
               {items.length === 0 && (
@@ -229,11 +336,8 @@ function Marketplace() {
               )}
             </>
           )}
-
         </div>
-
       </section>
-
     </main>
   );
 }

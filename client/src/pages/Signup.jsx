@@ -12,6 +12,9 @@ function Signup() {
     confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,17 +22,59 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match.");
       return;
     }
 
-    alert("Signup UI working! Backend integration coming soon.");
-    console.log("Signup details:", formData);
-    navigate("/login");
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5001/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim().toLowerCase(),
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Signup failed.");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      window.dispatchEvent(new Event("authChanged"));
+
+      alert("Account created successfully!");
+
+      navigate("/");
+
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,7 +115,7 @@ function Signup() {
             name="password"
             type="password"
             placeholder="Create a password"
-            minLength="6"
+            minLength="8"
             value={formData.password}
             onChange={handleChange}
             required
@@ -82,14 +127,24 @@ function Signup() {
             name="confirmPassword"
             type="password"
             placeholder="Confirm your password"
-            minLength="6"
+            minLength="8"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
           />
 
-          <button type="submit" className="auth-button">
-            Create Account
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

@@ -212,4 +212,193 @@
       padding: 11px 8px;
     }
   }
+
+  .settings-password-form {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+  }
   
+  .settings-password-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .settings-password-field > label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .settings-password-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .settings-password-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .settings-password-input button {
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  
+  .settings-save-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  
+  .settings-save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .settings-password-message {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .settings-password-message.success {
+    color: #15803d;
+  }
+  
+  .settings-password-message.error {
+    color: #dc2626;
+  }
+
+/* Appearance - Dark Theme */
+
+.settings-page.dark-theme {
+  background: #171525;
+  color: #f4f1ff;
+}
+
+.settings-page.dark-theme .settings-heading h1,
+.settings-page.dark-theme .settings-content h2,
+.settings-page.dark-theme .settings-card h3 {
+  color: #f4f1ff;
+}
+
+.settings-page.dark-theme .settings-heading p,
+.settings-page.dark-theme .settings-description,
+.settings-page.dark-theme .settings-card p {
+  color: #c0bbd1;
+}
+
+.settings-page.dark-theme .settings-sidebar,
+.settings-page.dark-theme .settings-content,
+.settings-page.dark-theme .settings-card {
+  background: #242136;
+  border-color: #39344f;
+}
+
+.settings-page.dark-theme .settings-menu-item {
+  color: #e0dced;
+}
+
+.settings-page.dark-theme .settings-menu-item:hover,
+.settings-page.dark-theme .settings-menu-item.active {
+  background: #39304f;
+  color: #c9aaff;
+}
+
+.settings-page.dark-theme .settings-info-row {
+  border-color: #39344f;
+}
+
+.settings-page.dark-theme .settings-info-row span {
+  color: #c0bbd1;
+}
+
+.settings-page.dark-theme .settings-info-row strong {
+  color: #f4f1ff;
+}
+
+.settings-page.dark-theme .settings-note {
+  background: #302a45;
+  color: #e0dced;
+}
+
+.settings-page.dark-theme .settings-password-field > label {
+  color: #f4f1ff;
+}
+
+.settings-page.dark-theme .settings-password-input {
+  border-color: #514967;
+  background: #302a45;
+}
+
+.settings-page.dark-theme .settings-password-input input {
+  background: transparent;
+  color: #fff;
+}
+
+.settings-page.dark-theme .settings-password-input input::placeholder {
+  color: #aaa2bd;
+}
+
+.settings-theme-preview {
+  margin-top: 15px;
+  padding: 14px;
+  background: #f7f5ff;
+  border-radius: 9px;
+  color: #7651a8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.settings-page.dark-theme .settings-theme-preview {
+  background: #302a45;
+  color: #d3baff;
+}
+
+/* Help and Support - FAQs */
+
+.settings-faq {
+  padding: 16px 0;
+  border-top: 1px solid #eeeaf7;
+}
+
+.settings-faq summary {
+  color: #39354d;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.settings-faq p {
+  margin-top: 12px;
+}
+
+.settings-page.dark-theme .settings-faq {
+  border-color: #39344f;
+}
+
+.settings-page.dark-theme .settings-faq summary {
+  color: #e6dcff;
+}
+
+.settings-page.dark-theme .settings-faq p {
+  color: #c0bbd1;
+}

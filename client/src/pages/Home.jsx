@@ -1,7 +1,54 @@
 
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API = "http://localhost:5001/api";
+
 function Home() {
+  const [featuredItems, setFeaturedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // FETCH REAL FEATURED LISTINGS
+  useEffect(() => {
+    const fetchFeaturedItems = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(`${API}/listings`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Failed to fetch featured items.");
+        }
+
+        // Display the first 3 actual listings
+        setFeaturedItems((data.listings || []).slice(0, 3));
+      } catch (err) {
+        console.error("Featured items error:", err);
+        setError(err.message || "Unable to load featured items.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedItems();
+  }, []);
+
+  // EMOJI BASED ON CATEGORY
+  const getEmoji = (category) => {
+    const emojis = {
+      Electronics: "💻",
+      Books: "📚",
+      "Study Materials": "🧮",
+      Accessories: "🎒",
+      Others: "📦",
+    };
+
+    return emojis[category] || "📦";
+  };
+
   return (
     <main className="home-page">
       <section className="hero-section">
@@ -78,122 +125,179 @@ function Home() {
 
       </section>
 
+      {/* FEATURED ITEMS */}
+      <section className="featured-section">
+        <div className="section-heading">
+          <div>
+            <span className="section-label">EXPLORE CAMPUS FINDS</span>
+            <h2>Featured Items</h2>
+            <p>Discover useful things shared by students around you.</p>
+          </div>
 
-<section className="featured-section">
-  <div className="section-heading">
-    <div>
-      <span className="section-label">EXPLORE CAMPUS FINDS</span>
-      <h2>Featured Items</h2>
-      <p>Discover useful things shared by students around you.</p>
-    </div>
+          <Link to="/marketplace" className="view-all-btn">
+            View All →
+          </Link>
+        </div>
 
-    <Link to="/marketplace" className="view-all-btn">
-      View All →
-    </Link>
-  </div>
+        <div className="featured-grid">
 
-  <div className="featured-grid">
-    <div className="item-card">
-      <div className="item-image">💻</div>
-      <span className="item-category">Electronics</span>
-      <h3>Study Laptop</h3>
-      <p>Available for rent</p>
-      <strong>₹500 / week</strong>
-    </div>
+          {loading ? (
+            <div className="featured-message">
+              <h3>Loading featured items...</h3>
+              <p>Please wait while we fetch campus listings.</p>
+            </div>
+          ) : error ? (
+            <div className="featured-message">
+              <h3>Unable to load featured items</h3>
+              <p>{error}</p>
+            </div>
+          ) : featuredItems.length === 0 ? (
+            <div className="featured-message">
+              <h3>No listings available yet</h3>
+              <p>Be the first student to list an item!</p>
+              <Link to="/list-item" className="view-all-btn">
+                List an Item →
+              </Link>
+            </div>
+          ) : (
+            featuredItems.map((item) => (
+              <article className="item-card" key={item._id}>
 
-    <div className="item-card">
-      <div className="item-image">📚</div>
-      <span className="item-category">Books</span>
-      <h3>Engineering Books</h3>
-      <p>Available for sale</p>
-      <strong>₹350</strong>
-    </div>
+                <div className="item-image">
+                  {item.imageUrl ? (
+                    <img
+                      src={
+                        item.imageUrl.startsWith("http")
+                          ? item.imageUrl
+                          : `http://localhost:5001${item.imageUrl}`
+                      }
+                      alt={item.itemName}
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <span>{getEmoji(item.category)}</span>
+                  )}
+                </div>
 
-    <div className="item-card">
-      <div className="item-image">🎧</div>
-      <span className="item-category">Accessories</span>
-      <h3>Wireless Headphones</h3>
-      <p>Available for sale</p>
-      <strong>₹800</strong>
-    </div>
-  </div>
-</section>
+                <span className="item-category">
+                  {item.category}
+                </span>
 
+                <h3>{item.itemName}</h3>
 
-<section className="how-section">
-  <div className="how-heading">
-    <span className="section-label">SIMPLE & EASY</span>
-    <h2>How CampusLoop Works</h2>
-    <p>Get what you need in just three simple steps.</p>
-  </div>
+                <p>
+                  {item.listingType === "Swap"
+                    ? "Available for exchange"
+                    : item.listingType === "Rent"
+                    ? "Available for rent"
+                    : item.listingType === "Borrow"
+                    ? "Available to borrow"
+                    : "Available for sale"}
+                </p>
 
-  <div className="how-grid">
-    <div className="how-card">
-      <div className="how-icon">🔍</div>
-      <span className="step-number">01</span>
-      <h3>Explore</h3>
-      <p>
-        Browse items listed by students on your campus.
-        Find exactly what you need.
-      </p>
-    </div>
+                <strong>
+                  {item.price === 0
+                    ? "Price on request"
+                    : item.listingType === "Rent"
+                    ? `₹${item.price} / rent`
+                    : item.listingType === "Swap"
+                    ? "Exchange"
+                    : `₹${item.price}`}
+                </strong>
 
-    <div className="how-card">
-      <div className="how-icon">🤝</div>
-      <span className="step-number">02</span>
-      <h3>Connect</h3>
-      <p>
-        Contact the student directly and discuss
-        the item, price or exchange.
-      </p>
-    </div>
+                <Link
+                  to={`/item/${item._id}`}
+                  className="view-item-btn"
+                >
+                  View Item →
+                </Link>
 
-    <div className="how-card">
-      <div className="how-icon">🎉</div>
-      <span className="step-number">03</span>
-      <h3>Exchange</h3>
-      <p>
-        Meet on campus, complete your exchange
-        and enjoy a smarter student community.
-      </p>
-    </div>
-  </div>
-</section>
+              </article>
+            ))
+          )}
 
+        </div>
+      </section>
 
-<section className="why-section">
-  <div className="why-heading">
-    <span className="section-label">WHY CAMPUSLOOP?</span>
-    <h2>More Than Just a Marketplace</h2>
-    <p>A smarter way to share resources and connect with your campus community.</p>
-  </div>
+      {/* HOW IT WORKS */}
+      <section className="how-section">
+        <div className="how-heading">
+          <span className="section-label">SIMPLE & EASY</span>
+          <h2>How CampusLoop Works</h2>
+          <p>Get what you need in just three simple steps.</p>
+        </div>
 
-  <div className="why-grid">
-    <div className="why-card">
-      <div className="why-icon">🎓</div>
-      <h3>Made for Students</h3>
-      <p>A marketplace designed around student needs and campus life.</p>
-    </div>
+        <div className="how-grid">
+          <div className="how-card">
+            <div className="how-icon">🔍</div>
+            <span className="step-number">01</span>
+            <h3>Explore</h3>
+            <p>
+              Browse items listed by students on your campus.
+              Find exactly what you need.
+            </p>
+          </div>
 
-    <div className="why-card">
-      <div className="why-icon">💰</div>
-      <h3>Budget Friendly</h3>
-      <p>Save money by buying, renting and exchanging items with others.</p>
-    </div>
+          <div className="how-card">
+            <div className="how-icon">🤝</div>
+            <span className="step-number">02</span>
+            <h3>Connect</h3>
+            <p>
+              Contact the student directly and discuss
+              the item, price or exchange.
+            </p>
+          </div>
 
-    <div className="why-card">
-      <div className="why-icon">🌱</div>
-      <h3>Sustainable Living</h3>
-      <p>Give pre-loved items a second life instead of letting them go to waste.</p>
-    </div>
+          <div className="how-card">
+            <div className="how-icon">🎉</div>
+            <span className="step-number">03</span>
+            <h3>Exchange</h3>
+            <p>
+              Meet on campus, complete your exchange
+              and enjoy a smarter student community.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <div className="why-card">
-      <div className="why-icon">🤝</div>
-      <h3>Campus Community</h3>
-      <p>Connect with fellow students and make campus life easier.</p>
-    </div>
-  </div>
-</section>
+      {/* WHY CAMPUSLOOP */}
+      <section className="why-section">
+        <div className="why-heading">
+          <span className="section-label">WHY CAMPUSLOOP?</span>
+          <h2>More Than Just a Marketplace</h2>
+          <p>
+            A smarter way to share resources and connect with your campus community.
+          </p>
+        </div>
+
+        <div className="why-grid">
+          <div className="why-card">
+            <div className="why-icon">🎓</div>
+            <h3>Made for Students</h3>
+            <p>A marketplace designed around student needs and campus life.</p>
+          </div>
+
+          <div className="why-card">
+            <div className="why-icon">💰</div>
+            <h3>Budget Friendly</h3>
+            <p>Save money by buying, renting and exchanging items with others.</p>
+          </div>
+
+          <div className="why-card">
+            <div className="why-icon">🌱</div>
+            <h3>Sustainable Living</h3>
+            <p>Give pre-loved items a second life instead of letting them go to waste.</p>
+          </div>
+
+          <div className="why-card">
+            <div className="why-icon">🤝</div>
+            <h3>Campus Community</h3>
+            <p>Connect with fellow students and make campus life easier.</p>
+          </div>
+        </div>
+      </section>
 
     </main>
   );

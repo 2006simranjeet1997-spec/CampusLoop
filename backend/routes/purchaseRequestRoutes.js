@@ -6,7 +6,8 @@ const {
   createPurchaseRequest,
   getMyPurchaseRequests,
   getSellerPurchaseRequests,
-  updatePurchaseRequest
+  updatePurchaseRequest,
+  cancelPurchaseRequest
 } = require("../controllers/purchaseRequestController");
 
 const protect = require("../middleware/authMiddleware");
@@ -16,6 +17,9 @@ router.post("/", protect, createPurchaseRequest);
 
 // Buyer: View their requests
 router.get("/my", protect, getMyPurchaseRequests);
+
+// Buyer: Cancel pending purchase request
+router.patch("/:id/cancel", protect, cancelPurchaseRequest);
 
 // Seller: View requests received
 router.get("/received", protect, getSellerPurchaseRequests);

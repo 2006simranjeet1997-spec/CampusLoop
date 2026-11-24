@@ -2,18 +2,72 @@
 import { useState } from "react";
 import "./Settings.css";
 
+const API = "http://localhost:5001/api";
+
 function Settings() {
   const [activeTab, setActiveTab] = useState("account");
 
-  const [notifications, setNotifications] = useState({
+  const user = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user") || "null");
+    } catch {
+      return null;
+    }
+  })();
+
+  const userId = user?._id || user?.id || "guest";
+
+  const notificationKey = `campusloop_notifications_${userId}`;
+  const privacyKey = `campusloop_privacy_${userId}`;
+
+  const defaultNotifications = {
     messages: true,
     listingUpdates: true,
     announcements: false
-  });
+  };
 
-  const [privacy, setPrivacy] = useState({
+  const defaultPrivacy = {
     showEmail: false,
     showListings: true
+  };
+
+  const loadPreferences = (key, defaults) => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(key) || "null");
+      return saved ? { ...defaults, ...saved } : defaults;
+    } catch {
+      return defaults;
+    }
+  };
+
+  const [notifications, setNotifications] = useState(() =>
+    loadPreferences(notificationKey, defaultNotifications)
+  );
+
+  const [privacy, setPrivacy] = useState(() =>
+    loadPreferences(privacyKey, defaultPrivacy)
+  );
+
+  const [theme, setTheme] = useState(() =>
+    localStorage.getItem("campusloop_theme") || "light"
+  );
+
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState({
+    type: "",
+    text: ""
   });
 
   const menuItems = [
@@ -26,20 +80,29 @@ function Settings() {
     { id: "about", label: "About CampusLoop", icon: "ℹ️" }
   ];
 
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-
   const handleToggle = (section, key) => {
     if (section === "notifications") {
-      setNotifications(prev => ({
-        ...prev,
-        [key]: !prev[key]
-      }));
+      setNotifications(prev => {
+        const updated = { ...prev, [key]: !prev[key] };
+        localStorage.setItem(notificationKey, JSON.stringify(updated));
+        return updated;
+      });
     } else {
-      setPrivacy(prev => ({
-        ...prev,
-        [key]: !prev[key]
-      }));
+      setPrivacy(prev => {
+        const updated = { ...prev, [key]: !prev[key] };
+        localStorage.setItem(privacyKey, JSON.stringify(updated));
+        return updated;
+      });
     }
+  };
+
+  const handleThemeChange = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+  
+    setTheme(newTheme);
+    localStorage.setItem("campusloop_theme", newTheme);
+  
+    document.documentElement.dataset.theme = newTheme;
   };
 
   const renderToggle = (checked, onChange) => (
@@ -51,6 +114,145 @@ function Settings() {
       />
       <span className="settings-slider"></span>
     </label>
+  );
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+
+    setPasswordForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    setPasswordMessage({ type: "", text: "" });
+  };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    const {
+      currentPassword,
+      newPassword,
+      confirmPassword
+    } = passwordForm;
+
+    setPasswordMessage({ type: "", text: "" });
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordMessage({
+        type: "error",
+        text: "Please fill in all password fields."
+      });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setPasswordMessage({
+        type: "error",
+        text: "New password must be at least 8 characters."
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage({
+        type: "error",
+        text: "New passwords do not match."
+      });
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      setPasswordMessage({
+        type: "error",
+        text: "New password must be different from current password."
+      });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setPasswordMessage({
+        type: "error",
+        text: "Please log in again."
+      });
+      return;
+    }
+
+    try {
+      setPasswordLoading(true);
+
+      const response = await fetch(`${API}/auth/change-password`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to change password.");
+      }
+
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+
+      setPasswordMessage({
+        type: "success",
+        text: data.message || "Password changed successfully!"
+      });
+
+    } catch (error) {
+      setPasswordMessage({
+        type: "error",
+        text: error.message || "Something went wrong."
+      });
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
+  const renderPasswordField = (label, name, visibilityKey) => (
+    <div className="settings-password-field">
+      <label htmlFor={name}>{label}</label>
+
+      <div className="settings-password-input">
+        <input
+          id={name}
+          type={showPasswords[visibilityKey] ? "text" : "password"}
+          name={name}
+          value={passwordForm[name]}
+          onChange={handlePasswordChange}
+          placeholder={`Enter ${label.toLowerCase()}`}
+          autoComplete="off"
+          required
+        />
+
+        <button
+          type="button"
+          onClick={() => togglePasswordVisibility(visibilityKey)}
+        >
+          {showPasswords[visibilityKey] ? "🙈" : "👁️"}
+        </button>
+      </div>
+    </div>
   );
 
   const renderContent = () => {
@@ -96,11 +298,48 @@ function Settings() {
             </p>
 
             <div className="settings-card">
-              <h3>Password</h3>
-              <p>Protect your account with a strong password.</p>
-              <p className="settings-note">
-                Password management will be available here.
-              </p>
+              <h3>Change Password</h3>
+              <p>Update your password to keep your account secure.</p>
+
+              <form
+                className="settings-password-form"
+                onSubmit={handleChangePassword}
+              >
+                {renderPasswordField(
+                  "Current Password",
+                  "currentPassword",
+                  "current"
+                )}
+
+                {renderPasswordField(
+                  "New Password",
+                  "newPassword",
+                  "new"
+                )}
+
+                {renderPasswordField(
+                  "Confirm New Password",
+                  "confirmPassword",
+                  "confirm"
+                )}
+
+                {passwordMessage.text && (
+                  <p
+                    className={`settings-password-message ${passwordMessage.type}`}
+                    role="alert"
+                  >
+                    {passwordMessage.text}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="settings-save-button"
+                  disabled={passwordLoading}
+                >
+                  {passwordLoading ? "Updating..." : "Update Password"}
+                </button>
+              </form>
             </div>
           </>
         );
@@ -189,16 +428,30 @@ function Settings() {
           <>
             <h2>Appearance</h2>
             <p className="settings-description">
-              Customize how CampusLoop looks.
+              Customize how your Settings page looks.
             </p>
 
             <div className="settings-card">
-              <h3>Theme</h3>
-              <p>Choose your preferred appearance.</p>
-              <p className="settings-note">
-                Light theme is currently active. Theme customization
-                will be implemented later.
-              </p>
+              <div className="settings-option">
+                <div>
+                  <h3>Dark Mode</h3>
+                  <p>
+                    Switch between light and dark appearance.
+                    Your preference will be saved automatically.
+                  </p>
+                </div>
+
+                {renderToggle(
+                  theme === "dark",
+                  handleThemeChange
+                )}
+              </div>
+
+              <div className="settings-theme-preview">
+                <span>
+                  {theme === "dark" ? "🌙 Dark mode is active" : "☀️ Light mode is active"}
+                </span>
+              </div>
             </div>
           </>
         );
@@ -208,17 +461,77 @@ function Settings() {
           <>
             <h2>Help & Support</h2>
             <p className="settings-description">
-              Need help using CampusLoop?
+              Find answers to common questions about CampusLoop.
             </p>
 
             <div className="settings-card">
               <h3>How CampusLoop Works</h3>
-              <p>Learn how to buy, sell, rent, borrow and swap items.</p>
+              <p>
+                CampusLoop is a student marketplace where you can
+                buy, sell, rent, borrow and swap items with other students.
+              </p>
+            </div>
+
+            <div className="settings-card settings-faq-card">
+              <h3>Frequently Asked Questions</h3>
+
+              <details className="settings-faq">
+                <summary>How can I sell an item?</summary>
+                <p>
+                  Open the List Item section, add your item's details,
+                  upload an image, enter the price and submit your listing.
+                </p>
+              </details>
+
+              <details className="settings-faq">
+                <summary>How can I buy an item?</summary>
+                <p>
+                  Browse the marketplace, search or filter for an item,
+                  open its details and contact the seller or send a
+                  purchase request.
+                </p>
+              </details>
+
+              <details className="settings-faq">
+                <summary>Can I rent or borrow items?</summary>
+                <p>
+                  Yes. Browse listings marked for rent or borrow and
+                  contact the seller to discuss the arrangement.
+                </p>
+              </details>
+
+              <details className="settings-faq">
+                <summary>How can I swap an item?</summary>
+                <p>
+                  Explore swap listings and contact the other student
+                  to discuss the exchange.
+                </p>
+              </details>
+
+              <details className="settings-faq">
+                <summary>How can I manage my listings?</summary>
+                <p>
+                  Visit your Profile to view and manage the items
+                  you have listed.
+                </p>
+              </details>
+
+              <details className="settings-faq">
+                <summary>Is an account required to use CampusLoop?</summary>
+                <p>
+                  You need to register and log in to access account-based
+                  features such as listing items and sending purchase requests.
+                </p>
+              </details>
             </div>
 
             <div className="settings-card">
-              <h3>Contact Support</h3>
-              <p>Support contact options will be added here.</p>
+              <h3>Stay Safe</h3>
+              <p>
+                Always verify item details before making a purchase.
+                Communicate clearly with other students and be careful
+                when arranging exchanges or payments.
+              </p>
             </div>
           </>
         );
@@ -248,7 +561,7 @@ function Settings() {
   };
 
   return (
-    <div className="settings-page">
+    <div className={`settings-page ${theme === "dark" ? "dark-theme" : ""}`}>
       <div className="settings-heading">
         <h1>Settings</h1>
         <p>Manage your account and preferences.</p>

@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -14,8 +15,14 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
 import HowItWorks from "./pages/HowItWorks";
+import Chat from "./pages/Chat";
 
 function App() {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("campusloop_theme") || "light";
+    document.documentElement.dataset.theme = savedTheme;
+  }, []);
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -31,6 +38,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/about" element={<About />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
 
       <Footer />

@@ -2163,3 +2163,387 @@
 .profile-dropdown button:hover {
   background: #f4f0ff;
 }
+.market-item-image {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wishlist heart - top right */
+.wishlist-heart {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #777;
+
+  font-size: 29px;
+  line-height: 1;
+  cursor: pointer;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Selected heart */
+.wishlist-heart.saved {
+  color: #e54865;
+  background: #fff5f7;
+}
+
+/* Sell/Rent/Borrow label - bottom left */
+.listing-type {
+  position: absolute;
+  top: auto;
+  bottom: 14px;
+  left: 14px;
+  right: auto;
+  z-index: 3;
+}
+/* Featured listing images */
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Featured items loading and empty messages */
+.featured-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 35px 15px;
+}
+
+/* =====================================
+   CAMPUSLOOP GLOBAL DARK MODE
+===================================== */
+
+html[data-theme="dark"] body {
+  background: #171525;
+  color: #eeeaf7;
+}
+
+/* Navbar */
+
+html[data-theme="dark"] .navbar {
+  background: #211e32;
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .navbar .logo,
+html[data-theme="dark"] .nav-actions a,
+html[data-theme="dark"] .nav-links a {
+  color: #eeeaf7 !important;
+}
+
+html[data-theme="dark"] .nav-actions .list-btn {
+  background: #39304f;
+  border-color: #51476b;
+  color: #eeeaf7 !important;
+}
+
+html[data-theme="dark"] .nav-actions .signup-btn {
+  background: #7651a8;
+  color: white;
+}
+
+/* General page backgrounds */
+
+html[data-theme="dark"] .home-page,
+html[data-theme="dark"] .marketplace-page,
+html[data-theme="dark"] .item-details-page,
+html[data-theme="dark"] .about-page,
+html[data-theme="dark"] .how-page,
+html[data-theme="dark"] .list-page,
+html[data-theme="dark"] .list-item-page,
+html[data-theme="dark"] .auth-page {
+  background: #171525;
+  color: #eeeaf7;
+}
+
+/* Homepage */
+
+html[data-theme="dark"] .hero-section,
+html[data-theme="dark"] .marketplace-header,
+html[data-theme="dark"] .list-header,
+html[data-theme="dark"] .about-hero,
+html[data-theme="dark"] .how-hero,
+html[data-theme="dark"] .how-section,
+html[data-theme="dark"] .why-section,
+html[data-theme="dark"] .featured-section,
+html[data-theme="dark"] .home-intro {
+  background: #211e32;
+}
+
+html[data-theme="dark"] .hero-content h1,
+html[data-theme="dark"] .home-intro h2,
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .how-heading h2,
+html[data-theme="dark"] .why-heading h2 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .hero-description,
+html[data-theme="dark"] .home-intro p,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .how-heading p,
+html[data-theme="dark"] .why-heading p {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .floating-card {
+  background: #302a45;
+}
+
+html[data-theme="dark"] .floating-card h3 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .floating-card p {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .hero-secondary-btn {
+  background: #302a45;
+  border-color: #51476b;
+  color: #d3baff;
+}
+
+/* Marketplace and product cards */
+
+html[data-theme="dark"] .item-card,
+html[data-theme="dark"] .market-item-card,
+html[data-theme="dark"] .how-card,
+html[data-theme="dark"] .why-card,
+html[data-theme="dark"] .value-card,
+html[data-theme="dark"] .step-card,
+html[data-theme="dark"] .option-card,
+html[data-theme="dark"] .about-highlight {
+  background: #242136;
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .item-card h3,
+html[data-theme="dark"] .market-item-info h3,
+html[data-theme="dark"] .how-card h3,
+html[data-theme="dark"] .why-card h3,
+html[data-theme="dark"] .value-card h3,
+html[data-theme="dark"] .step-card h3,
+html[data-theme="dark"] .option-card h3,
+html[data-theme="dark"] .about-highlight h3 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .item-card p,
+html[data-theme="dark"] .market-item-info p,
+html[data-theme="dark"] .how-card p,
+html[data-theme="dark"] .why-card p,
+html[data-theme="dark"] .value-card p,
+html[data-theme="dark"] .step-card p,
+html[data-theme="dark"] .option-card p,
+html[data-theme="dark"] .about-highlight p {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .item-image,
+html[data-theme="dark"] .market-item-image,
+html[data-theme="dark"] .details-image,
+html[data-theme="dark"] .card-icon,
+html[data-theme="dark"] .how-icon {
+  background: #302a45;
+}
+
+/* Marketplace filters and search */
+
+html[data-theme="dark"] .marketplace-header h1,
+html[data-theme="dark"] .results-heading h2,
+html[data-theme="dark"] .filter-group h3 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .marketplace-header p,
+html[data-theme="dark"] .results-heading span {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .marketplace-search,
+html[data-theme="dark"] .filter-btn {
+  background: #302a45;
+  border-color: #51476b;
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .filter-btn.active {
+  background: #7651a8;
+  border-color: #7651a8;
+  color: white;
+}
+
+/* Item details */
+
+html[data-theme="dark"] .details-info h1,
+html[data-theme="dark"] .details-info h3,
+html[data-theme="dark"] .seller-box h4 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .details-info > p,
+html[data-theme="dark"] .seller-box p {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .seller-box {
+  background: #242136;
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .details-divider {
+  background: #39344f;
+}
+
+/* Forms */
+
+html[data-theme="dark"] .listing-form,
+html[data-theme="dark"] .auth-card {
+  background: #242136;
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .listing-form h2,
+html[data-theme="dark"] .auth-heading h1 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .listing-form label,
+html[data-theme="dark"] .auth-card label {
+  color: #e0dced;
+}
+
+html[data-theme="dark"] .listing-form input,
+html[data-theme="dark"] .listing-form select,
+html[data-theme="dark"] .listing-form textarea,
+html[data-theme="dark"] .auth-card input {
+  background: #302a45;
+  border-color: #51476b;
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .listing-form input::placeholder,
+html[data-theme="dark"] .listing-form textarea::placeholder,
+html[data-theme="dark"] .auth-card input::placeholder {
+  color: #aaa2bd;
+}
+
+html[data-theme="dark"] .auth-heading p,
+html[data-theme="dark"] .auth-switch {
+  color: #c0bbd1;
+}
+
+/* About and How It Works */
+
+html[data-theme="dark"] .about-story,
+html[data-theme="dark"] .about-values,
+html[data-theme="dark"] .how-steps,
+html[data-theme="dark"] .how-options {
+  background: #171525;
+}
+
+html[data-theme="dark"] .about-hero h1,
+html[data-theme="dark"] .how-hero h1,
+html[data-theme="dark"] .about-story-content h2 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .about-hero p,
+html[data-theme="dark"] .how-hero p,
+html[data-theme="dark"] .about-story-content p {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .about-cta,
+html[data-theme="dark"] .how-cta {
+  background: #211e32;
+}
+
+html[data-theme="dark"] .about-cta h2,
+html[data-theme="dark"] .how-cta h2 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .about-cta p,
+html[data-theme="dark"] .how-cta p {
+  color: #c0bbd1;
+}
+
+/* Footer */
+
+html[data-theme="dark"] .main-footer,
+html[data-theme="dark"] .footer {
+  background: #211e32;
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .footer-links h3 {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .footer-links a,
+html[data-theme="dark"] .footer-brand p,
+html[data-theme="dark"] .footer-bottom {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .footer-bottom {
+  border-color: #39344f;
+}
+
+/* Profile dropdown */
+
+html[data-theme="dark"] .profile-dropdown {
+  background: #242136;
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .profile-dropdown-header {
+  border-color: #39344f;
+}
+
+html[data-theme="dark"] .profile-dropdown-header strong,
+html[data-theme="dark"] .profile-dropdown a,
+html[data-theme="dark"] .profile-dropdown button {
+  color: #eeeaf7;
+}
+
+html[data-theme="dark"] .profile-dropdown-header small {
+  color: #c0bbd1;
+}
+
+html[data-theme="dark"] .profile-dropdown a:hover,
+html[data-theme="dark"] .profile-dropdown button:hover {
+  background: #39304f;
+}
+
+/* Settings page */
+
+html[data-theme="dark"] .settings-page {
+  background: #171525;
+  color: #eeeaf7;
+}
+
+/* Shared text */
+
+html[data-theme="dark"] .empty-results,
+html[data-theme="dark"] .list-header p,
+html[data-theme="dark"] .listing-subtitle {
+  color: #c0bbd1;
+}
