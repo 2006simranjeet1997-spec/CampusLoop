@@ -1,8 +1,9 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../config";
 
-const API = "http://localhost:5001/api";
+const API = `${API_URL}/api`;
 
 function Home() {
   const [featuredItems, setFeaturedItems] = useState([]);
@@ -23,7 +24,6 @@ function Home() {
           throw new Error(data.message || "Failed to fetch featured items.");
         }
 
-        // Display the first 3 actual listings
         setFeaturedItems((data.listings || []).slice(0, 3));
       } catch (err) {
         console.error("Featured items error:", err);
@@ -53,13 +53,11 @@ function Home() {
     <main className="home-page">
       <section className="hero-section">
 
-        {/* Decorative background */}
         <div className="hero-circle hero-circle-left"></div>
         <div className="hero-circle hero-circle-right"></div>
         <div className="dot-pattern dots-left"></div>
         <div className="dot-pattern dots-right"></div>
 
-        {/* Floating category cards */}
         <div className="floating-card laptop-card">
           <div className="card-icon">💻</div>
           <div>
@@ -84,7 +82,6 @@ function Home() {
           </div>
         </div>
 
-        {/* Decorative text */}
         <div className="side-note left-note">
           <span>✳</span>
           <p>Same campus<br />More possibilities</p>
@@ -95,7 +92,6 @@ function Home() {
           <p>Students<br />Helping Students</p>
         </div>
 
-        {/* Main hero content */}
         <div className="hero-content">
           <span className="hero-label">CAMPUS MARKETPLACE</span>
 
@@ -122,7 +118,6 @@ function Home() {
         </div>
 
         <div className="scroll-indicator">↓</div>
-
       </section>
 
       {/* FEATURED ITEMS */}
@@ -140,7 +135,6 @@ function Home() {
         </div>
 
         <div className="featured-grid">
-
           {loading ? (
             <div className="featured-message">
               <h3>Loading featured items...</h3>
@@ -162,14 +156,13 @@ function Home() {
           ) : (
             featuredItems.map((item) => (
               <article className="item-card" key={item._id}>
-
                 <div className="item-image">
                   {item.imageUrl ? (
                     <img
                       src={
                         item.imageUrl.startsWith("http")
                           ? item.imageUrl
-                          : `http://localhost:5001${item.imageUrl}`
+                          : `${API_URL}${item.imageUrl}`
                       }
                       alt={item.itemName}
                       onError={(e) => {
@@ -213,11 +206,9 @@ function Home() {
                 >
                   View Item →
                 </Link>
-
               </article>
             ))
           )}
-
         </div>
       </section>
 
@@ -298,7 +289,6 @@ function Home() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

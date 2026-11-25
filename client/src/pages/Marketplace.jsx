@@ -1,8 +1,9 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../config";
 
-const API = "http://localhost:5001/api";
+const API = `${API_URL}/api`;
 
 function Marketplace() {
   const [items, setItems] = useState([]);
@@ -264,7 +265,7 @@ function Marketplace() {
                             src={
                               item.imageUrl.startsWith("http")
                                 ? item.imageUrl
-                                : `http://localhost:5001${item.imageUrl}`
+                                : `${API_URL}${item.imageUrl}`
                             }
                             alt={item.itemName}
                             onError={(e) => {
