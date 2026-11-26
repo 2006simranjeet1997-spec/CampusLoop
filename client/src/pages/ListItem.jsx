@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 function ListItem() {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ function ListItem() {
       }
 
       const response = await fetch(
-        "http://localhost:5001/api/listings",
+       `${API_URL}/api/listings`,
         {
           method: "POST",
           headers: {

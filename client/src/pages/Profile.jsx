@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 import "./Profile.css";
 
-const API = "http://localhost:5001/api";
+const API = `${API_URL}/api`;
 
 function Profile() {
   const navigate = useNavigate();
@@ -861,7 +862,7 @@ function Profile() {
       item.imageUrl
         ? item.imageUrl.startsWith("http")
           ? item.imageUrl
-          : `http://localhost:5001${item.imageUrl}`
+          : `${API_URL}${item.imageUrl}`
         : ""
     );
   };
@@ -1593,7 +1594,7 @@ function Profile() {
                         src={
                           item.imageUrl.startsWith("http")
                             ? item.imageUrl
-                            : `http://localhost:5001${item.imageUrl}`
+                            : `${API_URL}${item.imageUrl}`
                         }
                         alt={item.itemName}
                       />
@@ -2358,7 +2359,7 @@ function Profile() {
                     src={
                       item.imageUrl.startsWith("http")
                         ? item.imageUrl
-                        : `http://localhost:5001${item.imageUrl}`
+                        : `${API_URL}${item.imageUrl}`
                     }
                     alt={item.itemName}
                   />

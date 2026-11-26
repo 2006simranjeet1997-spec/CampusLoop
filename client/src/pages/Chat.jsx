@@ -1,9 +1,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+import { API_URL } from "../config";
 import "./Chat.css";
 
-const API = "http://localhost:5001/api";
+const API = `${API_URL}/api`;
 
 function Chat() {
   const [conversations, setConversations] = useState([]);
@@ -85,7 +86,7 @@ function Chat() {
   useEffect(() => {
     if (!token) return;
 
-    const socket = io("http://localhost:5001", {
+    const socket = io(API_URL, {
       auth: { token }
     });
 

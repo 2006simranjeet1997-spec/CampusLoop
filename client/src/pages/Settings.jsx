@@ -1,8 +1,9 @@
 
 import { useState } from "react";
 import "./Settings.css";
+import { API_URL } from "../config";
 
-const API = "http://localhost:5001/api";
+const API = `${API_URL}/api`;
 
 function Settings() {
   const [activeTab, setActiveTab] = useState("account");

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { API_URL } from "../config";
 
 function ItemDetails() {
   const { id } = useParams();
@@ -25,7 +26,7 @@ function ItemDetails() {
         setError("");
 
         const response = await fetch(
-          `http://localhost:5001/api/listings/${id}`
+          `${API_URL}/api/listings/${id}`
         );
 
         const data = await response.json();
@@ -60,7 +61,7 @@ function ItemDetails() {
       setRequestLoading(true);
 
       const response = await fetch(
-        "http://localhost:5001/api/purchase-requests",
+        `${API_URL}/api/purchase-requests`,
         {
           method: "POST",
           headers: {
@@ -107,7 +108,7 @@ function ItemDetails() {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/listings/my",
+        `${API_URL}/api/listings/my`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,7 +162,7 @@ function ItemDetails() {
       setSwapLoading(true);
 
       const response = await fetch(
-        "http://localhost:5001/api/swaps",
+        `${API_URL}/api/swaps`,
         {
           method: "POST",
           headers: {
@@ -255,7 +256,7 @@ function ItemDetails() {
               src={
                 item.imageUrl.startsWith("http")
                   ? item.imageUrl
-                  : `http://localhost:5001${item.imageUrl}`
+                  : `${API_URL}${item.imageUrl}`
               }
               alt={item.itemName}
               onError={(e) => {
